@@ -1,0 +1,219 @@
+import React from "react";
+import "@/App.css";
+import { ThemeProvider } from './context/ThemeContext';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import About from './components/About';
+import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Certifications from './components/Certifications';
+import Experience from './components/Experience';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+import { Toaster } from './components/ui/sonner';
+
+function App() {
+  return (
+    <ThemeProvider>
+      <div className="App min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300">
+        <Header />
+        <main>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Certifications />
+          <Experience />
+          <Contact />
+        </main>
+        <Footer />
+        <Toaster />
+      </div>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+```
+
+#### **2. /app/frontend/src/context/ThemeContext.js**
+```javascript
+import React, { createContext, useContext, useEffect, useState } from 'react';
+
+const ThemeContext = createContext();
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return context;
+};
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('portfolio-theme');
+    return savedTheme || 'light';
+  });
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    localStorage.setItem('portfolio-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+```
+
+#### **3. /app/frontend/src/data/mockData.js**
+```javascript
+export const portfolioData = {
+  hero: {
+    name: "Shibil P",
+    title: "BCA Student | AI & Cloud Computing Enthusiast",
+    description: "Aspiring to specialize in AI, cloud computing, and DevOps, with hands-on experience in IoT projects, machine learning models, and cloud applications. Skilled in Python, data analysis, and problem-solving with a strong interest in building innovative and practical technology solutions.",
+    cta: {
+      primary: "View My Work",
+      secondary: "Get In Touch"
+    },
+    resumeUrl: "https://customer-assets.emergentagent.com/job_business-web-42/artifacts/thk9yd43_IMG_3789.jpeg"
+  },
+  
+  about: {
+    title: "About Me",
+    description: "I'm a passionate BCA student from Yenepoya University, currently in my journey to become a skilled technologist. I love working on IoT projects, building machine learning models, and creating practical web applications. With hands-on experience in Python, JavaScript, and various IoT sensors, I'm constantly exploring new technologies to solve real-world problems.",
+    stats: [
+      { label: "Projects Built", value: "3+" },
+      { label: "Certifications", value: "5+" },
+      { label: "Technologies", value: "10+" },
+      { label: "Years Learning", value: "3+" }
+    ]
+  },
+
+  skills: {
+    title: "Skills & Technologies",
+    categories: [
+      {
+        name: "Programming",
+        technologies: ["Python", "C", "JavaScript", "HTML", "CSS"]
+      },
+      {
+        name: "Machine Learning",
+        technologies: ["Model Building", "Emotion Detection", "Recommendation Systems", "PySpark"]
+      },
+      {
+        name: "IoT & Robotics",
+        technologies: ["WEMOS D1/D2 MINI", "Arduino", "DHT11", "IR Sensors", "MQ2", "Ultrasonic", "PIR"]
+      },
+      {
+        name: "Design & Tools",
+        technologies: ["PowerPoint", "Photoshop", "Logo Design", "Power BI", "React"]
+      }
+    ]
+  },
+
+  projects: [
+    {
+      id: 1,
+      title: "Coffee Shop Website",
+      description: "A responsive and visually appealing coffee shop website showcasing menu items, store locations, and online ordering features with modern design principles.",
+      technologies: ["HTML", "CSS3"],
+      image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80",
+      link: "#",
+      github: "#"
+    },
+    {
+      id: 2,
+      title: "Turf Booking Web App",
+      description: "A comprehensive turf booking system that allows users to check availability, make reservations, and manage bookings with an intuitive interface and database integration.",
+      technologies: ["Java", "SQL", "CSS3"],
+      image: "https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&q=80",
+      link: "#",
+      github: "#"
+    },
+    {
+      id: 3,
+      title: "Weather Application",
+      description: "A dynamic weather app that fetches real-time weather data using APIs, displaying current conditions, forecasts, and location-based weather information.",
+      technologies: ["HTML", "CSS3", "JavaScript"],
+      image: "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&q=80",
+      link: "#",
+      github: "#"
+    },
+    {
+      id: 4,
+      title: "IoT Sensor Projects",
+      description: "Various IoT projects using Arduino and WEMOS boards with multiple sensors including DHT11 for temperature/humidity, IR sensors, MQ2 gas sensors, and motion detection with PIR sensors.",
+      technologies: ["Arduino", "WEMOS D1/D2", "C++", "IoT"],
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80",
+      link: "#",
+      github: "#"
+    },
+    {
+      id: 5,
+      title: "Machine Learning Models",
+      description: "Built various ML models including emotion detection systems and recommendation engines using Python and machine learning frameworks for practical applications.",
+      technologies: ["Python", "PySpark", "ML"],
+      image: "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&q=80",
+      link: "#",
+      github: "#"
+    },
+    {
+      id: 6,
+      title: "Design Portfolio",
+      description: "Created various visual designs including logos, posters, e-posters, and presentations for academic and personal projects using industry-standard design tools.",
+      technologies: ["Photoshop", "PowerPoint"],
+      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80",
+      link: "#",
+      github: "#"
+    }
+  ],
+
+  experience: [
+    {
+      id: 1,
+      title: "Bachelor of Computer Application (BCA)",
+      company: "Yenepoya Deemed to be University",
+      period: "Sep 2023 - Sep 2026",
+      description: "Currently pursuing BCA with focus on AI, cloud computing, and DevOps. Gaining hands-on experience through projects in web development, IoT, and machine learning."
+    },
+    {
+      id: 2,
+      title: "Higher Secondary Certification",
+      company: "GHSS CPY",
+      period: "May 2020 - March 2023",
+      description: "Completed higher secondary education with strong foundation in mathematics and computer science, setting the stage for technical education."
+    },
+    {
+      id: 3,
+      title: "Secondary School Leaving Certification",
+      company: "GVHSS CPY",
+      period: "June 2019 - March 2020",
+      description: "Completed secondary education with consistent academic performance and developed early interest in technology and problem-solving."
+    }
+  ],
+
+  contact: {
+    title: "Let's Connect",
+    description: "Interested in collaborating on a project or just want to chat about technology? Feel free to reach out!",
+    email: "Shibilpop7560@gmail.com",
+    phone: "+91 7560983177",
+    location: "Kacherikunnu, Cherpulassery, Palakkad, Kerala (679503)",
+    resumeUrl: "https://customer-assets.emergentagent.com/job_business-web-42/artifacts/thk9yd43_IMG_3789.jpeg",
+    social: {
+      github: "https://github.com",
+      linkedin: "https://www.linkedin.com/in/shibil-pulakkal-97941129a",
+      twitter: "https://twitter.com"
+    }
+  }
+};
